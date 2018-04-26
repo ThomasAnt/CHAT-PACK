@@ -33,8 +33,9 @@ namespace Wpf
 
         private SolidColorBrush[] blueColors = new SolidColorBrush[3];
         private SolidColorBrush[] greyColors = new SolidColorBrush[3];
-        string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
+        string[] blueHex = new string[] { "#6B7A8F", "#DCC7AA", "#F7882F" };
         string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
+
 
         private StackPanel sp = new StackPanel();
         private Button profileBtn = new Button();
@@ -70,7 +71,7 @@ namespace Wpf
            
             #region User profile
             ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
+            myBrush.ImageSource = new BitmapImage(new Uri("spongebobparking2.jpg", UriKind.Relative));
             myBrush.Stretch = Stretch.UniformToFill;        //@"C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture\smittyWerbenJaggerManJensen.jpg"
             profPic.Fill = myBrush;
             profPic.Height = 60;
@@ -109,8 +110,9 @@ namespace Wpf
         private void SetBackgroundColor(SolidColorBrush[] color)
         {
             left_Grid.Background = color[0];
+            friendsView.Background = color[0];
             center_Grid.Background = color[1];
-            right_Grid.Background = color[2];
+     //       right_Grid.Background = color[2];
         }
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
@@ -201,29 +203,7 @@ namespace Wpf
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
         }
-        /// <summary>
-        /// Create round picture
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
-        /// <summary>
-        /// Create round pictures
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
-        public Ellipse CreateEllipse(string imageName)
-        {
-            Ellipse pic = new Ellipse();
-            ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\project\guiDemo\Wpf\ProfilePicture\" + imageName));
-            myBrush.Stretch = Stretch.UniformToFill;
-            pic.Height = 60;
-            pic.Width = 60;
 
-            pic.Fill = myBrush;
-
-            return pic;
-        }
         /// <summary>
         /// Creates the user infos
         /// </summary>
