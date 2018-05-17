@@ -17,12 +17,12 @@ namespace Wpf
         public User(string name)
         {
             _name = name;
-            _img = new BitmapImage(new Uri(@"C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\default.png"));
+            _img = new BitmapImage(new Uri(@"C:\Users\thoma\OneDrive\Dokumente\Schule\HTL\3. Klasse\Projekt Entwicklung\hallo\CHAT-PACK\gui\Wpf\ProfilePicture\default.png"));
         }
         public User(string name, string img):this(name)
         {
             _name = name;
-            _img = new BitmapImage(new Uri(@"C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\" + img));
+            _img = new BitmapImage(new Uri(@"C:\Users\thoma\OneDrive\Dokumente\Schule\HTL\3. Klasse\Projekt Entwicklung\hallo\CHAT-PACK\gui\Wpf\ProfilePicture\" + img));
         }//C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture
 
         //public void AddMessage
