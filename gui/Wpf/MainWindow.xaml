@@ -175,10 +175,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Grid.Background>
+               <!-- <Grid.Background>
                     <ImageBrush ImageSource="C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\Gringo44.png" Stretch="Fill"/>
                 </Grid.Background>
-
+-->
             </Grid>
             
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
@@ -237,10 +237,10 @@
         </Grid>
         <Grid x:Name="right_Grid" Grid.Column="2">
 
-            <Grid.Background>
+            <!--<Grid.Background>
                 <ImageBrush ImageSource="C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\Veysel.png" Stretch="Fill"/>
             </Grid.Background>
-
+-->
 
         </Grid>
 
