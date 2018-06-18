@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="691.5" Width="499.5">
+    <Grid Background="LightBlue" Margin="0,0,0,-3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="553*"/>
+            <RowDefinition Height="111*"/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="button_log_in" Content="LOG IN" HorizontalAlignment="Right" Margin="0,0,159,44" Width="134" Click="button_Click" Grid.Row="1" Height="50" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_register" Content="Register" Margin="0,0,28,44" RenderTransformOrigin="0.52,2" Click="button_register_Click" HorizontalAlignment="Right" Width="126" Grid.Row="1" Height="50" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="textBox" Height="31" Margin="0,0,28,172" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="265" FontSize="24"/>
+        <Label x:Name="label" Content="username" Margin="0,0,311,159" HorizontalAlignment="Right" Width="151" Foreground="Black" FontSize="24" FontFamily="Open sans" Height="43" VerticalAlignment="Bottom"/>
+        <Label x:Name="label1" Content="password&#xD;&#xA;" HorizontalAlignment="Right" Margin="0,0,298,82" Width="164" FontSize="24" FontFamily="Open sans" Height="45" VerticalAlignment="Bottom"/>
+        <PasswordBox x:Name="passwordBox" HorizontalAlignment="Right" Margin="0,0,28,99" Width="265" FontSize="24" Height="28" VerticalAlignment="Bottom"/>
+        <PasswordBox x:Name="passwordBox_2" HorizontalAlignment="Right" Margin="0,0,28,22" Width="265" FontSize="24" Height="30" VerticalAlignment="Bottom"/>
+        <Label x:Name="label_pass" Content="repeat password&#xA;" HorizontalAlignment="Right" Margin="0,0,298,10" RenderTransformOrigin="0.917,0.595" Width="187" FontSize="24" Foreground="Black" FontFamily="Open sans" Height="42" VerticalAlignment="Bottom"/>
+
+        <Label x:Name="label2" Content="GETTING STARTED" HorizontalAlignment="Left" Margin="512,10,-390,0" VerticalAlignment="Top" Width="370" Height="52" FontFamily="Open sans" FontSize="36"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Margin="104,10,0,225" Width="310" Source="logo.png"/>
+
+    </Grid>
+</Window>
