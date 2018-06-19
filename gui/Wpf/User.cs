@@ -1,5 +1,7 @@
-﻿using System;
+﻿using LiveCharts.Defaults;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,23 +13,38 @@ namespace Wpf
     class User : IComparable<User>
     {
         private string _name;
+        private string _tag;
         private BitmapImage _img;
-        private string _message = "";
+        //EEEE
+        //only one messageContainer
+        private string _messageReceive;
+        private string _messageSent;
+        private int _amountSent = 0;
+        private int _amountReceive = 0;
+        private DateTime _friendsSince;
+        private double _currMessageAmount = 0;
+        private ObservableValue observeValueMessage;
 
-        public User(string name)
+
+        public User(string name, string tag)
         {
+            observeValueMessage = new ObservableValue(0);
             _name = name;
-            _img = new BitmapImage(new Uri(@"C:\Users\thoma\OneDrive\Dokumente\Schule\HTL\3. Klasse\Projekt Entwicklung\hallo\CHAT-PACK\gui\Wpf\ProfilePicture\default.png"));
+            _tag = tag;
+
+            string dir = GetDirectory();
+            _img = new BitmapImage(new Uri(dir + @"\ProfilePicture\default.png"));
         }
-        public User(string name, string img):this(name)
+
+
+        public User(string name, string tag, string img) : this(name, tag)
         {
             _name = name;
-            _img = new BitmapImage(new Uri(@"C:\Users\thoma\OneDrive\Dokumente\Schule\HTL\3. Klasse\Projekt Entwicklung\hallo\CHAT-PACK\gui\Wpf\ProfilePicture\" + img));
-        }//C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture
+            _tag = tag;
 
-        //public void AddMessage
-
-
+            string dir = GetDirectory();
+            _img = new BitmapImage(new Uri(dir + @"\ProfilePicture\" + img));
+        }
         #region Prop
         public string Name
         {
@@ -40,7 +57,6 @@ namespace Wpf
                 _name = value;
             }
         }
-
         public BitmapImage Img
         {
             get
@@ -53,6 +69,87 @@ namespace Wpf
                 _img = value;
             }
         }
+        public string MessageSent
+        {
+            get
+            {
+                return _messageSent;
+            }
+            set
+            {
+                _messageSent += value;
+            }
+        }
+        public string MessageReceive
+        {
+            get
+            {
+                return _messageReceive;
+            }
+            set
+            {
+                _messageReceive += value;
+            }
+        }
+        public string Tag
+        {
+            get
+            {
+                return _tag;
+            }
+
+            set
+            {
+                _tag = value;
+            }
+        }
+        public double CurrMessageAmount
+        {
+            get
+            {
+                return _currMessageAmount;
+            }
+
+            set
+            {
+                _currMessageAmount = value;
+            }
+        }
+        public int AmountSent
+        {
+            get
+            {
+                return _amountSent;
+            }
+            set
+            {
+                _amountSent = value;
+            }
+        }
+        public int AmountReceive
+        {
+            get
+            {
+                return _amountReceive;
+            }
+            set
+            {
+                _amountReceive = value;
+            }
+        }
+
+        public ObservableValue ObserveValueMessage
+        {
+            get
+            {
+                return observeValueMessage;
+            }
+
+            set
+            {
+                observeValueMessage = value;
+            }
+        }
         #endregion
 
         public int CompareTo(User other)
@@ -63,5 +160,22 @@ namespace Wpf
         {
             return this.Name;
         }
+
+        public int GetTotalMessages()
+        {
+            int total;
+            total = AmountReceive + AmountSent;
+
+            return total;
+        }
+        private string GetDirectory()
+        {
+            string path = Directory.GetCurrentDirectory();
+            path = Directory.GetParent(path).ToString();
+            path = Directory.GetParent(path).ToString();
+
+            return path;
+        }
+
     }
 }

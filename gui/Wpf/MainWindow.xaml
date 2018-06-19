@@ -8,10 +8,13 @@
         mc:Ignorable="d"
         Title="ChatPack" Height="Auto" Width="Auto" 
         MinHeight="600" MinWidth="950" WindowState="Maximized"
+        
         >
-    <!--Icon="./Wpf/joy.png"-->
+
 
     <Window.Resources>
+
+
         <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/gear.png"/>
         <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/phone.png"/>
         <Image x:Key="penImg" Source="pack://siteoforigin:,,,/ButtonImage/pen.png"/>
@@ -38,15 +41,15 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
-    
+
+
     <!--Grid for the layout-->
     <!--<Grid Background="AntiqueWhite">-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="left_Grid" >
@@ -63,22 +66,24 @@
                             <ImageBrush/>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <Border BorderThickness="5">
-                        <TextBlock FontSize="18" Foreground="WhiteSmoke" 
+                    <StackPanel Orientation="Vertical" Margin="5">
+
+                        <TextBlock x:Name="tBoxName" FontSize="18" Foreground="WhiteSmoke" 
                                    VerticalAlignment="Center" Text="Smitty"/>
-                    </Border>
+
+                        <TextBlock x:Name="Status" TextAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Grid x:Name="list_Grid" Grid.Row="1" Background="#4769ef">
+            <Grid x:Name="list_Grid" Grid.Row="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border BorderThickness="10">
-                    <TextBlock Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
-                </Border>
+
+                <TextBlock Background="Orange" Margin="10" Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
                 <Border BorderThickness="10">
                     <Button x:Name="addBtn" Width="30" Height="30" HorizontalAlignment="Right" 
                             Content="{StaticResource addImg}" Style="{StaticResource MyButton}"/>
@@ -106,24 +111,49 @@
 
                 </Popup>
 
-                <Grid x:Name="Info" Grid.Row="1"/>
-                <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
-                          SelectionChanged="SelectFriend" 
-                           Grid.Row="1">
-                    <ListView.Effect>
-                        <BlurEffect Radius="100"/>
-                    </ListView.Effect>
+                <!--User's information-->
+                <Grid x:Name="Info" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Username:" />
+                    <TextBox Grid.Column="1" x:Name="tBoxEditName" IsReadOnly="True"/>
+
+                    <Label Content="Tag:" Grid.Row="1"/>
+                    <Label x:Name="lbTag" Grid.Row="1" Grid.Column="1"/>
+
+                    <Label Content="Date:" Grid.Row="2"/>
+                    <Label x:Name="lbDate" Grid.Row="2" Grid.Column="1"/>
+
+                    <Label Content="Total friends:" Grid.Row="3"/>
+                    <Label x:Name="lbTotalFriends" Grid.Row="3" Grid.Column="1"/>
+                </Grid>
+                <ListView x:Name="friendsView" SelectionMode="Single" 
+                          SelectionChanged="SelectFriend" Grid.Row="1" HorizontalAlignment="Left" Width="250" >
                 </ListView>
             </Grid>
-            
+
             <Button x:Name="btnSetting" Grid.Row="2" Margin="160,10,30,10" Content="{StaticResource SettingImg}"  
-                     Click="Settings" Style="{StaticResource MyButton}"/>
+                     Click="Settings" Style="{StaticResource MyButton}" MouseEnter="btnSetting_MouseEnter" MouseLeave="btnSetting_MouseLeave">
+            </Button>
+            <Popup x:Name="ppuSetName" PlacementTarget="{Binding ElementName= btnSetting}" Placement="Right">
+                <TextBlock Text="Setting" Background="White"/>
 
-
+            </Popup>
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
-
             <Popup x:Name="popUpSetting" PlacementTarget="{Binding ElementName= btnSetting}"
-                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True">
+                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True" 
+                   MouseLeave="popUpSetting_MouseLeave">
                 <TextBlock Height="200" Width="210" Background="Transparent" >
                     <StackPanel Orientation="Vertical"  Margin="10">
                         
@@ -169,81 +199,64 @@
             <Grid x:Name="selFriendGrid" Grid.Column="0" Grid.Row="0"/>
 
 
-                <Grid x:Name="remStatGrid" Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid x:Name="remStatGrid" Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-
-               <!-- <Grid.Background>
-                    <ImageBrush ImageSource="C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\Gringo44.png" Stretch="Fill"/>
-                </Grid.Background>
--->
             </Grid>
-            
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0" Visibility="Hidden"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
-            
-            <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
-                <Grid >
-                    <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
+
+            <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="10">
+                <Grid>
+                    <lvc:CartesianChart x:Name="messageChart" Series="{Binding SeriesCollection}" 
+                                        LegendLocation="Left" Visibility="Hidden">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Week" Labels="{Binding Labels}"></lvc:Axis>
+                            <lvc:Axis Title="Week" Labels="{Binding Labels}"/>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                            <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"/>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-                    
-                    
-                    
-                    
                 </Grid>
             </Border>
-            
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="14" >
-                <Grid x:Name="chat_Grid" >
-                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
+
+            <Border x:Name="Chat_Border" Visibility="Hidden" 
+                    Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="10" >
+
+                <ScrollViewer x:Name="scrollView"  ScrollViewer.VerticalScrollBarVisibility="Auto"
                       Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
-                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
-                      
+                    <TextBox x:Name="ShowInputBlock" FontSize="22" Background="White" 
+                                 IsReadOnly="True" TextWrapping="Wrap"/>
+                </ScrollViewer>
 
-            <!---->
-            
-            <Grid Grid.Column="2" Grid.Row="3">
+            </Border>
+
+
+            <Grid x:Name="sendCall_Grid" Grid.Column="2" Grid.Row="3" Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Border BorderThickness="0,14,0,14">
+                <Border BorderThickness="0,10,0,10">
                     <Button x:Name="sendBtn" Width="40" Content="Send" Click="SendingMessage" />
                 </Border>
-                <Border Grid.Column="1" BorderThickness="0,14,0,14">
+                <Border Grid.Column="1" BorderThickness="0,10,0,10">
                     <Button Width="40" Content="{StaticResource CallImg}" Style="{StaticResource MyButton}"/>
                 </Border>
             </Grid>
-            
-            <!--<Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Background="Cyan">
-            </Grid> #457ad1-->
-            <Border  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="14">
+
+            <Border  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="10">
                 <TextBox x:Name="InputBox" TextAlignment="Left" VerticalContentAlignment="Center"
-                    FontSize="22" KeyDown="OnKeyEnterHandler">
+                    FontSize="22" KeyDown="OnKeyEnterHandler" Visibility="Hidden">
                 </TextBox>
             </Border>
         </Grid>
+
         <Grid x:Name="right_Grid" Grid.Column="2">
-
-            <!--<Grid.Background>
-                <ImageBrush ImageSource="C:\Users\light\Documents\HTL\SYP\repos\CHAT-PACK\Wpf\ProfilePicture\Veysel.png" Stretch="Fill"/>
-            </Grid.Background>
--->
-
         </Grid>
-
     </Grid>
-
 </Window>

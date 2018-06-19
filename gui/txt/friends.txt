@@ -1,8 +1,10 @@
-Gringo;Gringo44.png
-Guse;holUp.JPG
-Sharp;jazzStops.jpg
-David;monkey.png
-Moon man;moon.jpg
-Smitty;smittyWerbenJaggerManJensen.jpg
-Max;max.JPG
-warau;sales.png
+Gringo;#1132;Gringo44.png
+Guse;#8182
+Jürgen;#1394;jazzStops.jpg
+David;#2481;monkey.png
+Moon man;#9402;moon.jpg
+Smitty;#0123;smittyWerbenJaggerManJensen.jpg
+Max;#1943;max.JPG
+warau;#2222;sales.png
+Dam;#6841
+Ax;#5729
