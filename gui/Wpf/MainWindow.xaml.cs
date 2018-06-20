@@ -45,6 +45,8 @@ namespace Wpf
         private Button cancelBtn = new Button();
         private string currTag;
         private ImageBrush currImageBrush = new ImageBrush();
+        private ObservableValue[] ob;
+
 
         private int[] statusAmount = new int[] { 1, 5, 10 };
 
@@ -105,6 +107,7 @@ namespace Wpf
             ReadFile("friends.txt");
             CreateSPItem();
             friendsView.ItemsSource = spList;
+            CreateStats();
 
             sendCall_Grid.Visibility = Visibility.Hidden;
             addBtn.Click += TypeTagNumber;
@@ -302,7 +305,7 @@ namespace Wpf
 
             friend.CurrMessageAmount++;
             friend.AmountSent++;
-            friend.MessageSent = dateLine;
+            friend.MessageContainer = dateLine;
             ShowInputBlock.Text += dateLine;
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();
@@ -410,9 +413,8 @@ namespace Wpf
                 if (friendsList[i].Tag == currTag)
                     tempIndex = i;
             }
-            //EEEE
-            //Shows only sent message at the monment
-            ShowInputBlock.Text = friendsList[tempIndex].MessageSent;
+
+            ShowInputBlock.Text = friendsList[tempIndex].MessageContainer;
 
             mainSP.Children.Add(ellImg);
             mainSP.Children.Add(spNameTag);
@@ -435,7 +437,7 @@ namespace Wpf
             sendCall_Grid.Visibility = Visibility.Visible;
             InputBox.Visibility = Visibility.Visible;
             Chat_Border.Visibility = Visibility.Visible;
-
+            right_Grid.Children.Clear();
         }
         /// <summary>                 
         /// Shows the stats
@@ -453,8 +455,6 @@ namespace Wpf
 
             GenerateStatusInfo();
 
-            CreateStats();
-
             sendCall_Grid.Visibility = Visibility.Hidden;
             InputBox.Visibility = Visibility.Hidden;
             Chat_Border.Visibility = Visibility.Hidden;
@@ -465,25 +465,47 @@ namespace Wpf
         private void CreateStats()
         {
             Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-            User u = GetCurrentFriend();
 
-            u.ObserveValueMessage = new ObservableValue(u.CurrMessageAmount);
+            ob = new ObservableValue[7];
+            for (int i = 0; i < ob.Length; i++)
+            {
+                ob[i] = new ObservableValue(0);
+            }
+            
+
+            messageChart.AxisY.Clear();
+            messageChart.AxisY.Add(new Axis
+            {
+                Separator = new LiveCharts.Wpf.Separator
+                {
+                    Step = 10
+                },
+                MinValue = 0,
+                FontSize = 16,
+                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0,0,0)),
+                Title = "Messages"
+            });
+            
 
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
                 {
-                    Values = new ChartValues<ObservableValue> { u.ObserveValueMessage }//, 50, 39, 50, 35 }
+                    Values = new ChartValues<ObservableValue> {ob[0], ob[1], ob[2], ob[3], ob[4], ob[5], ob[6]}
                 }
             };
 
             DataContext = this;
+
         }
 
         private void UpdateChart()
         {
             User u = GetCurrentFriend();
-            u.ObserveValueMessage.Value++;
+            ob[0].Value = Convert.ToDouble(u.CurrMessageAmount);
+            //
+            
+         
             messageChart.Update(true);
 
         }

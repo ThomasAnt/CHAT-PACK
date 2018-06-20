@@ -17,8 +17,7 @@ namespace Wpf
         private BitmapImage _img;
         //EEEE
         //only one messageContainer
-        private string _messageReceive;
-        private string _messageSent;
+        private string _messageContainer;
         private int _amountSent = 0;
         private int _amountReceive = 0;
         private DateTime _friendsSince;
@@ -67,28 +66,6 @@ namespace Wpf
             set
             {
                 _img = value;
-            }
-        }
-        public string MessageSent
-        {
-            get
-            {
-                return _messageSent;
-            }
-            set
-            {
-                _messageSent += value;
-            }
-        }
-        public string MessageReceive
-        {
-            get
-            {
-                return _messageReceive;
-            }
-            set
-            {
-                _messageReceive += value;
             }
         }
         public string Tag
@@ -148,6 +125,19 @@ namespace Wpf
             set
             {
                 observeValueMessage = value;
+            }
+        }
+
+        public string MessageContainer
+        {
+            get
+            {
+                return _messageContainer;
+            }
+
+            set
+            {
+                _messageContainer = value;
             }
         }
         #endregion

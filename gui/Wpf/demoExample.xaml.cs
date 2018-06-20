@@ -15,6 +15,9 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using Microsoft.Win32;
 using System.Windows.Media.Animation;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Wpf
 {
@@ -23,93 +26,86 @@ namespace Wpf
     /// </summary>
     public partial class demoExample : Window
     {
+        private delegate void ChangeWin(string text);
         public demoExample()
         {
             InitializeComponent();
-            //adding series will update and animate the chart automatically
-            //SeriesCollection.Add(new ColumnSeries
+            //Window a = new Wpf.MainWindow();
+
+            //a.ShowDialog();
+
+            //string connectionString = @"server = (localdb)\MSSQLLocalDB";
+
+            //using (SqlConnection connection = new SqlConnection(connectionString))
             //{
-            //    Title = "2016",
-            //    Values = new ChartValues<double> { 11, 56, 42 }
-            //});
+            //    try
+            //    {
+            //        SqlCommand command = new SqlCommand("SELECT * FROM  tablename WHERE STATID = @param", connection);
+            //        connection.Open();
 
-            //also adding values updates and animates the chart automatically
-            //SeriesCollection[1].Values.Add(48d);
+            //        //Prepare command
+            //        command.Parameters.AddWithValue("@param", );
 
-            btn.Click += moveTb;
+            //        //Execute Reader / The Query
+            //        using (SqlDataReader reader = command.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                // Display all the columns. 
+            //                for (int i = 0; i < reader.FieldCount; i++)
+            //                {
+            //                    //(int)reader.GetValue(i) 
+            //                }
+            //            }
+            //        }
+
+            //        ...
+
+            //    }
+            //    catch (SqlException ex)
+            //    {
+            //        ...
+            //    }
+            //} (edited)
+            this.FontSize = 18;
+            //Process[] processlist = Process.GetProcesses();
+
+            
+
+            Thread t = new Thread(GetTitle);
+            t.IsBackground = true;
+
+            t.Start();
+
+            //foreach (Process process in processlist)
+            //{
+            //    if (!String.IsNullOrEmpty(process.MainWindowTitle))
+            //    {
+            //        string t = "Process: " + process.ProcessName + "     ID: " + process.Id + "      Window title: "+ process.MainWindowTitle +"\n";
+            //        tb.Text += t;
+            //    }
+            //}
+
+
+            //pop.IsOpen = true;
         }
 
-        private void moveTb(object sender, RoutedEventArgs e)
+        private void GetTitle()
         {
-            if (tb.Visibility == Visibility.Visible)
-                tb.Visibility = Visibility.Collapsed;
-            else
-                tb.Visibility = Visibility.Visible;
-
-        }
-        private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Border sp = sender as Border;
-            DoubleAnimation db = new DoubleAnimation();
-            //db.From = 12;
-            db.To = 150;
-            db.Duration = TimeSpan.FromSeconds(0.5);
-            db.AutoReverse = false;
-            db.RepeatBehavior = new RepeatBehavior(1);
-            sp.BeginAnimation(StackPanel.HeightProperty, db);
-        }
-
-        private void StackPanel_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Border sp = sender as Border;
-            DoubleAnimation db = new DoubleAnimation();
-            //db.From = 12;
-            db.To = 12;
-            db.Duration = TimeSpan.FromSeconds(0.5);
-            db.AutoReverse = false;
-            db.RepeatBehavior = new RepeatBehavior(1);
-            sp.BeginAnimation(StackPanel.HeightProperty, db);
-        }
-
-        //private void ShowStats(object sender, RoutedEventArgs e)
-        //{
-        //    SeriesCollection = new SeriesCollection
-        //    {
-        //        new ColumnSeries
-        //        {
-        //            Title = "2015",
-        //            Values = new ChartValues<double> { 10, 50, 39, 50 }
-        //        }
-        //    };
-
-
-        //    Labels = new[] { "Monday", "Tuesday", "Wendesday", "Thursday", "Friday" };
-        //    Formatter = value => value.ToString();
-
-        //    DataContext = this;
-
-        //}
-        public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> Formatter { get; set; }
-
-        private void listv_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            /*TextBox tb = new TextBox();
-            tb.KeyDown += EnterKey;
-            textGrid.Children.Add(tb);
-            */
-        }
-        private void EnterKey(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
+            Process p;
+            while (true)
             {
-                if (inBox.Text == "")
-                    return;
-
-                tbView.Text += inBox.Text + "\n";
-                inBox.Text = String.Empty;
+                p = Process.GetCurrentProcess();
+                ChangeWin del = new ChangeWin(ChangeText);
+                Thread.Sleep(700);
+                tb.Dispatcher.BeginInvoke(del, p.ProcessName);
             }
+            
+        }
+
+        private void ChangeText(string text)
+        {
+            tb.Text = text;
         }
     }
 }

@@ -1,26 +1,22 @@
-﻿ <Window x:Class="Wpf.demoExample"
+﻿<Window x:Class="Wpf.RequestWin"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf"
         mc:Ignorable="d"
-         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        Title="demoExample" Height="300" Width="300">
-
-    <Grid>
+        Title="RequestWin" Height="300" Width="300"
+        ResizeMode="NoResize">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            
-        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="tb" Text="test"/>
 
-        <TextBlock x:Name="tb"></TextBlock>
-        <Popup x:Name="pop">
-            <TextBlock Background="AliceBlue" Text="popup"/>
-        </Popup>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Margin="10" Content="Accept"/>
+            <Button Margin="10" Content="Decline" />
+        </StackPanel>
     </Grid>
 </Window>
