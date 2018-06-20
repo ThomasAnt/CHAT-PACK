@@ -722,7 +722,5 @@ namespace Wpf
             popUpSetting.IsOpen = false;
         }
         #endregion
-
-
     }
 }
