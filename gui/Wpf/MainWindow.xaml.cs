@@ -36,8 +36,9 @@ namespace Wpf
 
         private SolidColorBrush[] defaultColors = new SolidColorBrush[3];
         private SolidColorBrush[] alternativeColors = new SolidColorBrush[3];
-        string[] defaultHex = new string[] { "#6B7A8F", "#DCC7AA", "#F7882F" };
-        string[] alternativeHex = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
+        private string[] defaultHex = new string[] { "#6B7A8F", "#DCC7AA", "#b5611e" };
+        string[] alternativeHex = new string[] { "#0A1612", "#C5C1C0", "#1A2930" };
+        private SolidColorBrush[] fontColors = new SolidColorBrush[2];
 
         private Button changeImgBtn = new Button();
         private Button saveBtn = new Button();
@@ -46,7 +47,7 @@ namespace Wpf
         private ImageBrush currImageBrush = new ImageBrush();
         private ObservableValue[] ob;
 
-        private int[] statusAmount = new int[] { 1, 5, 10 };
+        private int[] statusAmount = new int[] { 20, 50, 100 };
         private bool weekEnd = false;
 
         private delegate void ChangeWin(string text);
@@ -86,6 +87,7 @@ namespace Wpf
             InitColor(alternativeColors, alternativeHex);
 
             SetBackgroundColor(defaultColors);
+            SetFontColor(fontColors[0]);
 
             #region User profile
             ImageBrush myBrush = new ImageBrush();
@@ -116,9 +118,27 @@ namespace Wpf
 
             if(DateTime.Now.DayOfWeek.ToString() == "Sunday")
             {
-                //EEEE
-                //In die dailyStats / neue column isWeekEnd
-                weekEnd = true;
+                string connectionString = @"server = (localdb)\MSSQLLocalDB";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    try
+                    {
+                        SqlCommand command = new SqlCommand
+                            ("UPDATE dailystats set isWeekEnd = @week where statID = @id", connection);
+
+                        connection.Open();
+
+                        command.Parameters.AddWithValue("@id", 1);
+                        command.Parameters.AddWithValue("@week",1);
+
+                        command.ExecuteNonQuery();
+
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                }
             }
             //week
             if (DateTime.Now.DayOfWeek.ToString() == "Monday")
@@ -127,7 +147,7 @@ namespace Wpf
                 {
                     //EEEE
                     //Set 0
-                    UpdateStatement();
+                   
                 }
             }
 
@@ -174,6 +194,11 @@ namespace Wpf
                 scb.Color = c;
                 br[i] = scb;
             }
+
+            fontColors[0] = new SolidColorBrush();
+            fontColors[1] = new SolidColorBrush();
+            fontColors[0].Color = (Color)ColorConverter.ConvertFromString("#000000");
+            fontColors[1].Color = (Color)ColorConverter.ConvertFromString("#ffffff");
         }
 
         private void SetBackgroundColor(SolidColorBrush[] color)
@@ -181,17 +206,31 @@ namespace Wpf
             left_Grid.Background = color[0];
             center_Grid.Background = color[1];
             right_Grid.Background = color[2];
+            ListTitle.Background = color[2];
+
+
+        }
+        private void SetFontColor(SolidColorBrush fontColor)
+        {
+            tBoxEditName.Foreground = fontColor;
+            ListTitle.Foreground = fontColor;
         }
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(btnBlue))
+            {
                 SetBackgroundColor(defaultColors);
+                SetFontColor(fontColors[0]);
+            }
             else
+            {
                 SetBackgroundColor(alternativeColors);
-
+                SetFontColor(fontColors[1]);
+            }
             btnBlue.IsEnabled = !btnBlue.IsEnabled;
             btnVio.IsEnabled = !btnVio.IsEnabled;
         }
+
         /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
@@ -481,8 +520,6 @@ namespace Wpf
 
         }
 
-        
-
         private void CreateStats()
         {
             ob = new ObservableValue[7];
@@ -545,15 +582,34 @@ namespace Wpf
             string connectionString = @"server = (localdb)\MSSQLLocalDB";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                string day = "";
+
                 try
                 {
+                    if (DateTime.Now.DayOfWeek.ToString() == "Monday")
+                        day = "messageMo";
+                    else if (DateTime.Now.DayOfWeek.ToString() == "Tuesday")
+                        day = "messageDi";
+                    else if (DateTime.Now.DayOfWeek.ToString() == "Wednesday")
+                        day = "messageMi";
+                    else if (DateTime.Now.DayOfWeek.ToString() == "Thursday")
+                        day = "messageDo";
+                    else if (DateTime.Now.DayOfWeek.ToString() == "Friday")
+                        day = "messageFr";
+                    else if (DateTime.Now.DayOfWeek.ToString() == "Saturday")
+                        day = "messageSa";
+                    else
+                        day = "messageSo";
+
+
                     SqlCommand command = new SqlCommand
-                        ("UPDATE dailystats set messageMo = @mo where statID = @", connection);
+                        ("UPDATE dailystats set "+day+" = @day where statID = @id", connection);
 
                     connection.Open();
 
                     //Prepare command
-                    command.Parameters.AddWithValue("@mo", u.CurrMessageAmount);
+                    command.Parameters.AddWithValue("@day", u.CurrMessageAmount);
+                    command.Parameters.AddWithValue("@id", 1);
                     //EEEE
                     //ned 2 sondern statID
                     command.ExecuteNonQuery();
@@ -604,10 +660,11 @@ namespace Wpf
             StackPanel s = new StackPanel();
 
             TextBlock[] tb = new TextBlock[5];
-
+            
             for (int i = 0; i < tb.Length; i++)
             {
                 tb[i] = new TextBlock();
+                tb[i].Foreground = fontColors[1];
             }
             User friend = GetCurrentFriend();
 
@@ -629,15 +686,16 @@ namespace Wpf
         {
             string status = "Friendship: ";
 
-            if (friend.GetTotalMessages() < statusAmount[0])
-                status += "Acquaintance";
-            else if (friend.GetTotalMessages() > statusAmount[1])
+            if (friend.GetTotalMessages() > statusAmount[2])
                 status += "Buddies";
 
-            //else if (friend.GetTotalMessages() > statusAmount[2] && friend.GetTotalMessages() < statusAmount[1])
-            //    status = "ABF";
-            else
+            else if (friend.GetTotalMessages() > statusAmount[1] && friend.GetTotalMessages() < statusAmount[2])
                 status += "Friends";
+
+            else if (friend.GetTotalMessages() > statusAmount[0] && friend.GetTotalMessages() < statusAmount[1])
+                status = "Acquaintance";
+            else
+                status += "Unfamiliar";
 
             return status;
         }
@@ -838,10 +896,32 @@ namespace Wpf
             }
             messageChart.Update(true);
         }
-        private void UpdateStatement()
+        private void UpdateStatement(int amount)
         {
 
-           
+            string connectionString = @"server = (localdb)\MSSQLLocalDB";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand
+                        ("UPDATE dailystats set messageMo = @day where statID = @id", connection);
+
+                    connection.Open();
+
+                    //Prepare command
+                    command.Parameters.AddWithValue("@mo", amount);
+                    command.Parameters.AddWithValue("@id", 1);
+                    //EEEE
+                    //ned 2 sondern statID
+                    command.ExecuteNonQuery();
+
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
         }
     }
 }

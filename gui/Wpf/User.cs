@@ -137,7 +137,7 @@ namespace Wpf
 
             set
             {
-                _messageContainer = value;
+                _messageContainer += value;
             }
         }
         #endregion

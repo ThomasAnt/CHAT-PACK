@@ -19,7 +19,6 @@
         <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/phone.png"/>
         <Image x:Key="penImg" Source="pack://siteoforigin:,,,/ButtonImage/pen.png"/>
         <Image x:Key="chatImg" Source="pack://siteoforigin:,,,/ButtonImage/chat.png"/>
-        <Image x:Key="addImg" Source="pack://siteoforigin:,,,/ButtonImage/add.png"/>
 
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -83,10 +82,10 @@
                 </Grid.RowDefinitions>
 
 
-                <TextBlock Background="Orange" Margin="10" Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock x:Name="ListTitle" Margin="10" Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
                 <Border BorderThickness="10">
                     <Button x:Name="addBtn" Width="30" Height="30" HorizontalAlignment="Right" 
-                            Content="{StaticResource addImg}" Style="{StaticResource MyButton}"/>
+                            Content="+" />
                 </Border>
 
                 <!--tag input-->
@@ -153,14 +152,14 @@
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
             <Popup x:Name="popUpSetting" PlacementTarget="{Binding ElementName= btnSetting}"
                    Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True" 
-                   MouseLeave="popUpSetting_MouseLeave">
-                <TextBlock Height="200" Width="210" Background="Transparent" >
+                   MouseLeave="popUpSetting_MouseLeave" >
+                <TextBlock Height="200" Width="210" Background="Beige">
                     <StackPanel Orientation="Vertical"  Margin="10">
                         
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Change color" VerticalAlignment="Center"/>
-                                <Button x:Name="btnBlue" Content="blue" Width="30" Click="ChangeColor" Margin="8"/>
-                                <Button x:Name="btnVio" Content="violet" Width="30" Click="ChangeColor" Margin="8"/>
+                                <Button x:Name="btnBlue" Content="-" Width="30" Click="ChangeColor" Margin="8"/>
+                                <Button x:Name="btnVio" Content="-" Width="30" Click="ChangeColor" Margin="8"/>
                         </StackPanel>
                         
                         <StackPanel Orientation="Horizontal">
@@ -169,11 +168,6 @@
                                         Click="ChangeInformation" Margin="8"/>
                         </StackPanel>
                         
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Volume" VerticalAlignment="Center"/>
-                                <Slider Maximum="100" Width="130" Margin="8"/>
-                        </StackPanel>
-                            
                     </StackPanel>
                 </TextBlock>
             </Popup>
@@ -206,7 +200,7 @@
                 </Grid.ColumnDefinitions>
             </Grid>
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0" Visibility="Hidden"/>
+            <TextBlock x:Name="FriendStatus" Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0" />
             <!--status zum stackpanel vom seletion hinzufügen -->
 
             <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="10">
@@ -234,10 +228,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Border BorderThickness="0,10,0,10">
-                    <Button x:Name="sendBtn" Width="40" Content="Send" Click="SendingMessage" />
+                    <Button x:Name="sendBtn" Width="40" Content="{StaticResource chatImg}" Style="{StaticResource MyButton}" Click="SendingMessage" />
                 </Border>
                 <Border Grid.Column="1" BorderThickness="0,10,0,10">
-                    <Button Width="40" Content="{StaticResource CallImg}" Style="{StaticResource MyButton}"/>
+                    <Button Width="40" />
                 </Border>
             </Grid>
 
