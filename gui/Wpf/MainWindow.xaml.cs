@@ -17,6 +17,7 @@ using LiveCharts.Defaults;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 //using System.Data;
 
@@ -28,8 +29,6 @@ namespace Wpf
     public partial class MainWindow : Window
     {
         #region Fields
-        SoundPlayer plr = new SoundPlayer("oof.wav");
-
         private bool isInfoOn = false;
 
         private List<User> friendsList = new List<User>();
@@ -47,8 +46,8 @@ namespace Wpf
         private ImageBrush currImageBrush = new ImageBrush();
         private ObservableValue[] ob;
 
-
         private int[] statusAmount = new int[] { 1, 5, 10 };
+        private bool weekEnd = false;
 
         private delegate void ChangeWin(string text);
         [DllImport("user32.dll")]
@@ -108,14 +107,31 @@ namespace Wpf
             friendsView.ItemsSource = spList;
             CreateStats();
 
-            
-
             sendCall_Grid.Visibility = Visibility.Hidden;
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
             currImageBrush = (ImageBrush)profPic.Fill;
-            
+
+
+            if(DateTime.Now.DayOfWeek.ToString() == "Sunday")
+            {
+                //EEEE
+                //In die dailyStats / neue column isWeekEnd
+                weekEnd = true;
+            }
+            //week
+            if (DateTime.Now.DayOfWeek.ToString() == "Monday")
+            {
+                if(weekEnd)
+                {
+                    //EEEE
+                    //Set 0
+                    UpdateStatement();
+                }
+            }
+
+
             Thread statusThread = new Thread(GetActiveWindowTitle);
             statusThread.IsBackground = true;
 
@@ -123,6 +139,7 @@ namespace Wpf
 
         }
 
+        
 
         private void GetActiveWindowTitle()
         {
@@ -311,7 +328,7 @@ namespace Wpf
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();
 
-            UpdateChart();
+            //UpdateChart();
         }
 
         /// <summary>
@@ -455,6 +472,7 @@ namespace Wpf
             btn.Click += ShowChat;
 
             GenerateStatusInfo();
+            UpdateChart();
 
             sendCall_Grid.Visibility = Visibility.Hidden;
             InputBox.Visibility = Visibility.Hidden;
@@ -463,6 +481,8 @@ namespace Wpf
 
         }
 
+        
+
         private void CreateStats()
         {
             ob = new ObservableValue[7];
@@ -470,6 +490,8 @@ namespace Wpf
             {
                 ob[i] = new ObservableValue(0);
             }
+
+            //comm.executeNonQuery
 
             messageChart.AxisX.Clear();
             messageChart.AxisY.Clear();
@@ -504,7 +526,7 @@ namespace Wpf
             {
                 new ColumnSeries
                 {
-                    Title = "Messages amount",
+                    Title = "Message amount:",
                     Values = new ChartValues<ObservableValue> {ob[0], ob[1], ob[2], ob[3], ob[4], ob[5], ob[6]}
                 }
             };
@@ -515,15 +537,34 @@ namespace Wpf
 
         private void UpdateChart()
         {
+
+            
             User u = GetCurrentFriend();
-            ob[0].Value = Convert.ToDouble(u.CurrMessageAmount);
-            ob[6].Value = Convert.ToDouble(u.CurrMessageAmount);
+            //ob[0].Value = Convert.ToDouble(u.CurrMessageAmount);
+            //ob[6].Value = Convert.ToDouble(u.CurrMessageAmount);
+            string connectionString = @"server = (localdb)\MSSQLLocalDB";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand
+                        ("UPDATE dailystats set messageMo = @mo where statID = @", connection);
 
-            //
+                    connection.Open();
 
+                    //Prepare command
+                    command.Parameters.AddWithValue("@mo", u.CurrMessageAmount);
+                    //EEEE
+                    //ned 2 sondern statID
+                    command.ExecuteNonQuery();
 
-            messageChart.Update(true);
-
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            SelectStatsFromDB();
         }
         private User GetCurrentFriend()
         {
@@ -619,7 +660,7 @@ namespace Wpf
             //friendsView.Visibility = Visibility.Collapsed;
             Info.Background = new SolidColorBrush(Colors.White);
             tBoxEditName.Text = tBoxName.Text;
-            lbTag.Content = "#1236";
+            lbTag.Content = "";
             lbDate.Content = DateTime.Now.ToString("dd.MM.yyyy");
             lbTotalFriends.Content = friendsList.Count;
         }
@@ -760,5 +801,47 @@ namespace Wpf
             popUpSetting.IsOpen = false;
         }
         #endregion
+
+        private void SelectStatsFromDB()
+        {
+
+            string connectionString = @"server = (localdb)\MSSQLLocalDB";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand
+                        ("SELECT messageMo, messageDi, messageMi, messageDo, messageFr, messageSa, messageSo " +
+                        "FROM dailystats WHERE statid = @param", connection);
+                    connection.Open();
+
+                    //Prepare command
+                    command.Parameters.AddWithValue("@param", 1);
+                    //EEEE
+                    //ned 2 sondern statID
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                ob[i].Value = (int)reader.GetValue(i);
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            messageChart.Update(true);
+        }
+        private void UpdateStatement()
+        {
+
+           
+        }
     }
 }
