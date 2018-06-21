@@ -15,26 +15,29 @@ using System.Windows.Shapes;
 namespace Wpf
 {
     /// <summary>
-    /// Interaction logic for RequestWin.xaml
+    /// Interaktionslogik für Registration.xaml
     /// </summary>
-    public partial class RequestWin : Window
+    public partial class Registration : Window
     {
-        public RequestWin()
+        public Registration()
         {
             InitializeComponent();
-
-            BtnAccept.Click += AcceptRequest;
-            BtnDecline.Click += DeclineRequest;
+            button_log_in.Click += button_log_in_Click;
         }
 
-        private void DeclineRequest(object sender, RoutedEventArgs e)
+        private void button_register_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
-        private void AcceptRequest(object sender, RoutedEventArgs e)
+        private void button_log_in_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MainWindow w = new Wpf.MainWindow();
+
+            w.tBoxName.Text = tboxUser.Text;
+            this.Close();
+            w.Show();
+            
         }
     }
 }

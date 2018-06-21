@@ -69,7 +69,7 @@
                     <StackPanel Orientation="Vertical" Margin="5">
 
                         <TextBlock x:Name="tBoxName" FontSize="18" Foreground="WhiteSmoke" 
-                                   VerticalAlignment="Center" Text="Smitty"/>
+                                   VerticalAlignment="Center"/>
 
                         <TextBlock x:Name="Status" TextAlignment="Center"/>
                     </StackPanel>
@@ -211,14 +211,7 @@
 
             <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="10">
                 <Grid>
-                    <lvc:CartesianChart x:Name="messageChart" Series="{Binding SeriesCollection}" Visibility="Hidden">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Week" Labels="{Binding Labels}" FontSize="16" Foreground="Black"/>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis/>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
+                    <lvc:CartesianChart x:Name="messageChart" Series="{Binding SeriesCollection}" Visibility="Hidden"/>
                 </Grid>
             </Border>
 

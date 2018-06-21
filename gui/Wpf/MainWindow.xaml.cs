@@ -71,12 +71,11 @@ namespace Wpf
         }
         public object SeriersCollection { get; private set; }
         public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
         #endregion
         public MainWindow()
         {
             InitializeComponent();
-
+            
             string path = Directory.GetCurrentDirectory();
             path = Directory.GetParent(path).ToString();
             path = Directory.GetParent(path).ToString();
@@ -108,6 +107,8 @@ namespace Wpf
             CreateSPItem();
             friendsView.ItemsSource = spList;
             CreateStats();
+
+            
 
             sendCall_Grid.Visibility = Visibility.Hidden;
             addBtn.Click += TypeTagNumber;
@@ -464,15 +465,13 @@ namespace Wpf
 
         private void CreateStats()
         {
-            Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-
             ob = new ObservableValue[7];
             for (int i = 0; i < ob.Length; i++)
             {
                 ob[i] = new ObservableValue(0);
             }
-            
 
+            messageChart.AxisX.Clear();
             messageChart.AxisY.Clear();
             messageChart.AxisY.Add(new Axis
             {
@@ -485,12 +484,27 @@ namespace Wpf
                 Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0,0,0)),
                 Title = "Messages"
             });
-            
+            messageChart.AxisX.Add(new Axis
+            {
+                Separator = new LiveCharts.Wpf.Separator
+                {
+                    Step = 1
+                },
+                MaxValue = 7, 
+                MinValue = 0,
+                FontSize = 16,
+                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)),
+                Title = "Week",
+                Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" }
+        });
+
+
 
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
                 {
+                    Title = "Messages amount",
                     Values = new ChartValues<ObservableValue> {ob[0], ob[1], ob[2], ob[3], ob[4], ob[5], ob[6]}
                 }
             };
@@ -503,9 +517,11 @@ namespace Wpf
         {
             User u = GetCurrentFriend();
             ob[0].Value = Convert.ToDouble(u.CurrMessageAmount);
+            ob[6].Value = Convert.ToDouble(u.CurrMessageAmount);
+
             //
-            
-         
+
+
             messageChart.Update(true);
 
         }

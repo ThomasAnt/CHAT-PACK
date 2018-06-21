@@ -12,11 +12,11 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="tb" Text="test"/>
+        <TextBox x:Name="tb" HorizontalAlignment="Center" VerticalAlignment="Center" Text="test"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Margin="10" Content="Accept"/>
-            <Button Margin="10" Content="Decline" />
+            <Button x:Name="BtnAccept" Margin="10" Content="Accept"/>
+            <Button x:Name="BtnDecline" Margin="10" Content="Decline" />
         </StackPanel>
     </Grid>
 </Window>
